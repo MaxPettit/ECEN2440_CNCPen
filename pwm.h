@@ -4,6 +4,7 @@
  *  Created on: Sep 23, 2019
  *      Author: maxpettit
  */
+#include <stdint.h>
 
 #ifndef PWM_H_
 #define PWM_H_
@@ -28,11 +29,11 @@ void config_pwm_timer(void);
  *  - TODO: enable/start timer (UP mode)
  *  - TODO: Counting and then reset * @param uint8_t duty_cycle: 0-100, percentage of time ON
  */
-void start_pwm(uint8_t duty_cycle);
+void start_pwm(uint8_t duty_cycle, uint8_t timer_sel, uint8_t freq);
 
 
 /* Stop Mode: clear all Mode Control bits, MC, in TAxCTL register */
-void stop_pwm(void);
+void stop_pwm(uint8_t timer_sel);
 
 
 /* Config P2.4 to output TA0.1 waveform */
