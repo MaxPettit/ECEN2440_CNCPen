@@ -9,13 +9,14 @@
 #define Z_DRIVER_H_
 
 #define z_pwm   2
-#define up_freq   300000 //place holder numbers
-#define down_freq 100000 //place holder numbers
+#define dwn  6.6
+#define up 7.2
+#define cnt_up    (up*CALC_PERIOD(200))/100
+#define cnt_dwn    (dwn*CALC_PERIOD(200))/100
 
 void pen_config(void);
 void pen_up(void);
 void pen_down(void);
-//void IRQ_handler(); //to be renamed appropriately
 void toggle_z(void);
 void test_z(void);
 

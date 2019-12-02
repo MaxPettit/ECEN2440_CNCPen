@@ -3,6 +3,7 @@
  *
  *  Created on: Sep 23, 2019
  */
+
 #include "msp.h"
 #include "pwm.h"
 
@@ -81,13 +82,10 @@ void config_pwm_gpio(void){
     P5->SEL1 &= ~BIT6;
     P5->SEL0 |= BIT6;
 
-
     //TimerA3 P10.4 or P10.5 Use 10.5
-        P10->DIR |= BIT5;
-        P10->SEL1 &= ~BIT5;
-        P10->SEL0 |= BIT5;
-
-
+    P10->DIR |= BIT5;
+    P10->SEL1 &= ~BIT5;
+    P10->SEL0 |= BIT5;
 }
 
 
