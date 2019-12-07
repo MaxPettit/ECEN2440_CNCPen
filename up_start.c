@@ -35,7 +35,7 @@ void start_msg(){
     err = uart_write(Wait);
     for(i = 0; i < 1000; i++);
     lcd_clear();
-    err = uart_write("my name max me like big peen");
+    err = uart_write("Go");
     if(err) return;
 }
 
