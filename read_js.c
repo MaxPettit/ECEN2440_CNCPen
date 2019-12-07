@@ -26,7 +26,7 @@ int8_t jslocation(uint8_t channelx, uint8_t channely){
     int16_t xaxis = ADC_getN(channelx);
     int16_t yaxis = ADC_getN(channely);
 
-    if((xaxis >= 14000) && (yaxis >= 14000)){
+    if((xaxis < 14500) && (xaxis > 12000) && (yaxis >= 14000)){
         location = 4;                               // Joystick Right
         P2->OUT = 0x05;
     }
@@ -34,7 +34,7 @@ int8_t jslocation(uint8_t channelx, uint8_t channely){
         location = 3;                               // Joystick Left
         P2->OUT = 0x06;
     }
-    else if((xaxis > 14000) && (yaxis > 12000) && (yaxis < 14000)){
+    else if((xaxis > 16000) && (yaxis > 12000) && (yaxis < 14500)){
         location = 2;                               // Joystick Up
         P2->OUT = 0x07;
     }
