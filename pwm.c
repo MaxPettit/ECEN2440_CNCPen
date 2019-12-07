@@ -8,21 +8,21 @@
 #include "pwm.h"
 
 void config_pwm_timer(){
-    int a_per = 200;
-    int z_per = 20;
+    int a_per = 20;
+    int z_per = 200;
     //A0 = x axis
     TIMER_A0->R = 0; //Reset timer
     TIMER_A0->CTL |=  TIMER_A_CTL_TASSEL_2; //Select SMCLK
     TIMER_A0->CCTL[1] |= TIMER_A_CCTLN_OUTMOD_7; //Set reset/set output mode 0x00E0
-    TIMER_A0->CCR[0] = 0xFFFF;//CALC_PERIOD(a_per); //Set ticks
-    TIMER_A0->CCR[1] = (50*CALC_PERIOD(z_per))/100;
+    TIMER_A0->CCR[0] = CALC_PERIOD(a_per);//Set ticks
+    TIMER_A0->CCR[1] = (50*CALC_PERIOD(a_per))/100;
 
     //A1 = y axis
     TIMER_A1->R = 0; //Reset timer
     TIMER_A1->CTL |=  TIMER_A_CTL_TASSEL_1; //Select SMCLK
     TIMER_A1->CCTL[1] |= TIMER_A_CCTLN_OUTMOD_7; //Set reset/set output mode 0x00E0
-    TIMER_A1->CCR[0] = CALC_PERIOD(z_per);;//CALC_PERIOD(a_per); //Set ticks
-    TIMER_A1->CCR[1] |= 50*CALC_PERIOD(z_per)/100;
+    TIMER_A1->CCR[0] = CALC_PERIOD(a_per);//Set ticks
+    TIMER_A1->CCR[1] |= 50*CALC_PERIOD(a_per)/100;
 
     //A2 = z axis
     TIMER_A2->R = 0; //Reset timer
@@ -53,8 +53,6 @@ void stop_pwm(uint8_t timer_sel){
             TIMER_A1->CTL &= ~0x010;
     if(timer_sel == 2)
             TIMER_A2->CTL &= ~0x010;
-    if(timer_sel == 3)
-            TIMER_A3->CTL &= ~0x010;
 }
 
 void config_pwm_gpio(void){
@@ -72,12 +70,6 @@ void config_pwm_gpio(void){
     P5->DIR |= BIT6;
     P5->SEL1 &= ~BIT6;
     P5->SEL0 |= BIT6;
-
-    //TimerA3 P10.4 or P10.5 Use 10.5
-    P10->DIR |= BIT5;
-    P10->SEL1 &= ~BIT5;
-    P10->SEL0 |= BIT5;
-}
 
 
 
