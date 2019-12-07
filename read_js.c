@@ -1,51 +1,68 @@
-#include "msp.h"
-#include "read_js.h"
-#include "stdint.h"
-
 /*
- * read_js.c
+ * js_test.c
  *
- *  Created on: Nov 26, 2019
- *      Author: Nathan
+ *  Created on: Dec 4, 2019
+ *      Author: dafre
  */
 
-void config_js(){
-    P4->DIR &= ~BIT5;                                   // P4.5 input
-    P4->SEL1 |= BIT5;                                   // Config P4.5 for ADC
-    P4->SEL0 |= BIT5;
+#include <read_js.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include "msp.h"
+#include "adc_test.h"
 
-    P4->DIR &= ~BIT6;                                   // P4.6 input
-    P4->SEL1 |= BIT6;                                   // Config P4.6 for ADC
-    P4->SEL0 |= BIT6;
+void joystick_configure(void){
+    P4->SEL0 |= BIT4;
+    P4->SEL1 |= BIT4;
+    P6->SEL0 |= BIT0;
+    P6->SEL1 |= BIT0;
 
-    P2->DIR |= 0x07;                                    // Sets led for testing
-    P2->OUT = 0;                                        // Sets led off initially
-
-    __enable_interrupt();
-    NVIC->ISER[0] = 1 << ((24) & 31);                   // Enable ADC interrupt ***come back***
-
-    ADC14->CTL0 = ADC14_CTL0_SHT0_2 | ADC14_CTL0_SHP | ADC14_CTL0_ON;     // Config ADC14, ADC14 on
-    ADC14->CTL1 = ADC14_CTL1_RES_2;                     // Sampling timer
-
-    ADC14->MCTL[0] |= 8;                                // A8 ADC input
-    ADC14->IER0 |= ADC14_IER0_IE0;                      // Enable ADC conversion interrupt
-
-    ADC14->MCTL[1] |= 7;                                // A7 ADC input
-    ADC14->IER0 |= ADC14_IER0_IE0;                      // Enable ADC conversion interrupt
-
-    //SCB_SCR &= ~SCB_SCR_SLEEPONEXIT;
+    P2->DIR |= 0x07;
+    P2->OUT = 0;
 }
 
-void js_position(){
-    if(ADC14->MEM[0] >= 0x7FF)
-        P2->OUT = 0x07;
-    if(ADC14->MEM[0] <= 0x0000)
-        P2->OUT = 0x01;
-    if(ADC14->MEM[1] >= 0x7FF)
+int8_t jslocation(uint8_t channelx, uint8_t channely){
+    int8_t location = 0;
+    int16_t xaxis = ADC_getN(channelx);
+    int16_t yaxis = ADC_getN(channely);
+
+    if((xaxis >= 14000) && (yaxis >= 14000)){
+        location = 4;                               // Joystick Right
         P2->OUT = 0x05;
-    if(ADC14->MEM[1] <= 0x0000)
+    }
+    else if ((xaxis < 15000) && (yaxis < 1000) && (xaxis> 12000)){
+        location = 3;                               // Joystick Left
+        P2->OUT = 0x06;
+    }
+    else if((xaxis > 14000) && (yaxis > 12000) && (yaxis < 14000)){
+        location = 2;                               // Joystick Up
+        P2->OUT = 0x07;
+    }
+    else if((yaxis > 12000) && (xaxis < 1000) && (yaxis < 14000)){
+        location = 1;                               // Joystick Down
+        P2->OUT = 0x04;
+    }
+    else if((xaxis < 4000) && (yaxis > 12000)){
+        location = 6;                               // Joystick Bottom Right
         P2->OUT = 0x03;
-    else
-        P2->OUT = 0;
+    }
+    else if((xaxis > 14000) && (yaxis < 6000)){
+        location = 5;                               // Joystick Top Left
+        P2->OUT = 0x02;
+    }
+    else if((xaxis < 1000) && (yaxis < 13000) && (yaxis > 3000)){
+        location = 7;                               // Joystick Bottom Left
+        P2->OUT = 0x01;
+    }
+/*    else if((xaxis > 15500) && (yaxis < 13000) && (yaxis > 3000)){
+        location = 8;
+    }
+    else if ((xaxis < 11000) && (yaxis < 3000) && (xaxis > 7000)){
+        location = 9;
+    }*/
+    else{
+       location = 0;
+       P2->OUT = 0;
+    }
+    return location;
 }
-
