@@ -3,9 +3,13 @@
 #define JOYSTICK
 #define TIMER
 
+#include <z_driver>
 #include <stdint.h>
 #include <stdio.h>
 #include "msp.h"
+#include "pwm.h"
+#include "up_start.h"
+#include "uart_driver.h"
 #include <adc.h>
 #include <read_js.h>
 
@@ -16,6 +20,11 @@ volatile uint8_t value;
 void main(void) {
     WDTCTL = WDTPW | WDTHOLD;                 // Stop WDT
     SCB->SCR &= ~SCB_SCR_ENABLE_SLEEPONEXIT;
+    
+    startup_config();
+    startup_go();
+    start_pwm(0,1);
+    start_pwm(0,0);
 
 #ifdef JOYSTICK
     joystick_configure(); // Configure Joystick P1 stuff
