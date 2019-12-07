@@ -15,23 +15,20 @@ Need to figure out correct baud rate settings
  */
 
 void uart_config(){
+    //UCA2CTLW0 is good: Uart, No parity, 8 bit data, 1 stop bit, LSB first
     UCA2CTLW0 = UCSWRST;
     UCA2CTLW0 |= UCSSEL_2; // choose src clk
-    UCA2CTLW0 |= UCMODE_0;
-    UCA2CTLW0 |= BITD; //MSB 1st
-    //UCA2CTLW0 &= ~BITD; //LSB 1st
+    UCA2CTLW0 |= UCMODE_0; //UART mode
+    UCA2CTLW0 &= ~BITD; //LSB 1st
+
+
     UCA2MCTLW = BIT0; //UCOS16
 
-    /*
-    UCA2MCTLW |= 0x2 << 4;// UCBRF0 = 2;
-    UCA2MCTLW |= 0x00 << 8; //UCBRS0 = 0x00;
-    UCA2BRW = 78; //UCBR
-    */
 
-
-       UCA2MCTLW |= 0x8 << 4;// UCBRF0 = 8;
-       UCA2MCTLW |= 0x20 << 8; //UCBRS0 = 0x20;
-       UCA2BRW = 6; //UCBR
+    //3000000 hz smclk
+    UCA2MCTLW |= 0x8 << 4;// UCBRF0 = 8;
+    UCA2MCTLW |= 0x55 << 8; //UCBRS0 = 0x55 or 0xAA;
+    UCA2BRW = 19; //UCBR
 
 
     //enable interrupt
@@ -61,10 +58,8 @@ int uart_write(const char *str)
     return 1;
 }
 
-void uart_char(const int *c)
-{
-            UCA2TXBUF = *c;
-}
-
-void lcd_config(){
+void lcd_clear(){
+    int err;
+    err = uart_write("|");
+    err = uart_write("-");
 }

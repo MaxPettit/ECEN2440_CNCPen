@@ -8,6 +8,7 @@
 #include "pwm.h"
 #include "up_start.h"
 #include "z_driver.h"
+#include "uart_driver.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -23,11 +24,17 @@ void pen_config(void){
 }
 
 void pen_up(void){
+    int err;
     TIMER_A2->CCR[1] = cnt_up;
+    lcd_clear();
+    err = uart_write("Pen Up");
 }
 
 void pen_down(void){
+    int err;
     TIMER_A2->CCR[1] = cnt_dwn;
+    lcd_clear();
+    err = uart_write("Pen Down");
 }
 
 void PORT6_IRQHandler(void){
@@ -39,10 +46,12 @@ void PORT6_IRQHandler(void){
 }
 
 void toggle_z(void){
-    if(TIMER_A2->CCR[1] == cnt_up)
+    if(TIMER_A2->CCR[1] == cnt_up){
         pen_down();
-    else
+    }
+    else{
         pen_up();
+    }
 
     P1->OUT ^= BIT0;
 }

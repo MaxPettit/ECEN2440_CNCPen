@@ -10,7 +10,7 @@
 
 void uart_config();
 int uart_write(const char *str);
-void uart_char(const int *c);
-void lcd_config();
+void uart_char(const int c);
+void lcd_clear();
 
 #endif /* UART_DRIVER_H_ */
