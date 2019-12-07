@@ -59,7 +59,7 @@ void toggle_z(void){
 void test_z(void){
         config_pwm_timer();
         config_pwm_gpio();
-        start_pwm(10,z_pwm,0);
+        start_pwm(10,z_pwm);
     int i;
    while(1){
        pen_up();

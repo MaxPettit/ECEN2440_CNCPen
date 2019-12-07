@@ -8,54 +8,42 @@
 #include "pwm.h"
 
 void config_pwm_timer(){
+    int a_per = 200;
+    int z_per = 20;
     //A0 = x axis
     TIMER_A0->R = 0; //Reset timer
     TIMER_A0->CTL |=  TIMER_A_CTL_TASSEL_2; //Select SMCLK
     TIMER_A0->CCTL[1] |= TIMER_A_CCTLN_OUTMOD_7; //Set reset/set output mode 0x00E0
-    TIMER_A0->CTL |= BIT7; //Clock divider of 4
+    TIMER_A0->CCR[0] = 0xFFFF;//CALC_PERIOD(a_per); //Set ticks
+    TIMER_A0->CCR[1] = (50*CALC_PERIOD(z_per))/100;
 
     //A1 = y axis
     TIMER_A1->R = 0; //Reset timer
-    TIMER_A1->CTL |=  TIMER_A_CTL_TASSEL_2; //Select SMCLK
+    TIMER_A1->CTL |=  TIMER_A_CTL_TASSEL_1; //Select SMCLK
     TIMER_A1->CCTL[1] |= TIMER_A_CCTLN_OUTMOD_7; //Set reset/set output mode 0x00E0
-    TIMER_A1->CTL |= BIT7; //Clock divider of 4
+    TIMER_A1->CCR[0] = CALC_PERIOD(z_per);;//CALC_PERIOD(a_per); //Set ticks
+    TIMER_A1->CCR[1] |= 50*CALC_PERIOD(z_per)/100;
 
     //A2 = z axis
     TIMER_A2->R = 0; //Reset timer
     TIMER_A2->CTL |=  TIMER_A_CTL_TASSEL_2; //Select SMCLK
     TIMER_A2->CCTL[1] |= TIMER_A_CCTLN_OUTMOD_7; //Set reset/set output mode 0x00E0
     TIMER_A2->CTL |= BIT7; //Clock divider of 4
+    TIMER_A2->CCR[0] = CALC_PERIOD(z_per); //Set ticks
+    TIMER_A2->CCR[1] = (50*CALC_PERIOD(z_per))/100;
 
-    //TBD
-    TIMER_A3->R = 0; //Reset timer
-    TIMER_A3->CTL |=  TIMER_A_CTL_TASSEL_2; //Select SMCLK
-    TIMER_A3->CCTL[1] |= TIMER_A_CCTLN_OUTMOD_7; //Set reset/set output mode 0x00E0
 }
 
-void start_pwm(uint8_t duty_cycle, uint8_t timer_sel, uint8_t freq){
-    int a_per = 200;
-    int z_per = 200;
+void start_pwm(uint8_t duty_cycle, uint8_t timer_sel){
     if(timer_sel == 0){//A0 = x axis
-
-                TIMER_A0->CCR[0] = CALC_PERIOD(a_per); //Set ticks
-                            TIMER_A0->CCR[1] = (duty_cycle*CALC_PERIOD(a_per))/100;
-                            TIMER_A0->CTL |= TIMER_A_CTL_MC_1;
+        TIMER_A0->CTL |= TIMER_A_CTL_MC_1;
     }
     if(timer_sel == 1){//A1 = y axis
-            TIMER_A1->CCR[0] = CALC_PERIOD(a_per); //Set ticks
-                        TIMER_A1->CCR[1] |= (50*CALC_PERIOD(PWM_FREQUENCY))/100;
-                        TIMER_A1->CTL |= TIMER_A_CTL_MC_1;
-        }
+        TIMER_A1->CTL |= TIMER_A_CTL_MC_1;
+    }
     if(timer_sel == 2){//A2 = z axis
-        TIMER_A2->CCR[0] = CALC_PERIOD(z_per); //Set ticks
-                    TIMER_A2->CCR[1] = (50*CALC_PERIOD(z_per))/100;
-                    TIMER_A2->CTL |= TIMER_A_CTL_MC_1;
-        }
-    if(timer_sel == 3){//A3 = ?
-            TIMER_A3->CCR[0] = CALC_PERIOD(50); //Set ticks
-                        TIMER_A3->CCR[1] |= (duty_cycle*CALC_PERIOD(50))/100;
-                        TIMER_A3->CTL |= TIMER_A_CTL_MC_1;
-            }
+        TIMER_A2->CTL |= TIMER_A_CTL_MC_1;
+    }
 }
 
 void stop_pwm(uint8_t timer_sel){

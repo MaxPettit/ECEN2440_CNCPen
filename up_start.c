@@ -17,7 +17,7 @@ void startup_config(){
     config_pwm_timer();
     config_pwm_gpio();
     pen_config();
-    start_pwm(10,z_pwm,0);
+    start_pwm(10,z_pwm);
     uart_config();
 }
 
@@ -35,7 +35,7 @@ void start_msg(){
     err = uart_write(Wait);
     for(i = 0; i < 1000; i++);
     lcd_clear();
-    err = uart_write("Go");
+    err = uart_write("go");
     if(err) return;
 }
 
