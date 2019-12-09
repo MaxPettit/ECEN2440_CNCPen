@@ -27,4 +27,3 @@ void led_color(volatile uint8_t color){
     if(color == 0)
         P2->OUT = 0;
 }
-

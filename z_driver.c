@@ -25,14 +25,16 @@ void pen_config(void){
 
 void pen_up(void){
     int err;
-    TIMER_A2->CCR[1] = cnt_up;
+   // TIMER_A2->CCR[1] = cnt_up;
+    TIMER_A3->CCR[1] = cnt_up;
     lcd_clear();
     err = uart_write("Pen Up");
 }
 
 void pen_down(void){
     int err;
-    TIMER_A2->CCR[1] = cnt_dwn;
+   // TIMER_A2->CCR[1] = cnt_dwn;
+    TIMER_A3->CCR[1] = cnt_dwn;
     lcd_clear();
     err = uart_write("Pen Down");
 }
@@ -46,7 +48,7 @@ void PORT6_IRQHandler(void){
 }
 
 void toggle_z(void){
-    if(TIMER_A2->CCR[1] == cnt_up){
+    if(TIMER_A3->CCR[1] == cnt_up){
         pen_down();
     }
     else{
@@ -59,7 +61,7 @@ void toggle_z(void){
 void test_z(void){
         config_pwm_timer();
         config_pwm_gpio();
-        start_pwm(10,z_pwm);
+        start_pwm(2);
     int i;
    while(1){
        pen_up();

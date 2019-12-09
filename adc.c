@@ -68,6 +68,3 @@ double ADC_getMV(uint8_t channel){
     int vref = 1200*((ADC14->MCTL[channel]&ADC14_MCTLN_VRSEL_1)>0)+3300*((ADC14->MCTL[channel]&ADC14_MCTLN_VRSEL_1)==0);
     return ((double)ADC_getN(channel))*(((double)vref)/(1<<14));
 }
-
-
-

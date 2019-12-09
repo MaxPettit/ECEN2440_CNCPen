@@ -30,7 +30,7 @@ void config_pwm_timer(void);
  *  - TODO: enable/start timer (UP mode)
  *  - TODO: Counting and then reset * @param uint8_t duty_cycle: 0-100, percentage of time ON
  */
-void start_pwm(uint8_t duty_cycle, uint8_t timer_sel);
+void start_pwm(uint8_t timer_sel);
 
 
 /* Stop Mode: clear all Mode Control bits, MC, in TAxCTL register */
