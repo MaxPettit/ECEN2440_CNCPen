@@ -2,24 +2,18 @@
  * motor.c
  *
  *  Created on: Dec 7, 2019
- *      Author: maxpettit
+ *      Author: maxpettit, Nathan
  */
 
 #include "msp.h"
 #include "pwm.h"
 #include "motor.h"
 
+/*
+   Starts and stops motor pwm based on joystick position
+   Determines direction of motors based on joystick position
+*/
 void motor_pos(volatile uint8_t pos){
-
-//    P2->DIR |= BIT6; // P1.2 output
-//    P2->SEL1 &= ~BIT6; // P1.2 select primary function
-//    P2->SEL0 &= ~BIT6; // P1.2 select primary function
-//    //P2->OUT |= BIT6;
-
-//    P2->DIR |= BIT7; // P1.2 output
-//    P2->SEL1 &= ~BIT7; // P1.2 select primary function
-//    P2->SEL0 &= ~BIT7; // P1.2 select primary function
-//    //P2->OUT &= ~BIT7;
 
     if(pos == 4){
         set_dir('x', 1);
@@ -66,16 +60,18 @@ void motor_pos(volatile uint8_t pos){
 }
 
 void set_dir(char c, int t){
+    // Toggles direction of x-axis motor based on joystick position
     if(c == 'x'){
         if(t == 1)
             P5->OUT &= ~BIT2;
         else if(t == 0)
             P5->OUT |= BIT2;
     }
-//    if(c == 'y'){
-//        if(t == 0)
-//            P2->OUT &= ~BIT7;
-//        else if(t == 1)
-//            P2->OUT |= BIT7;
-//        }
+    // Toggles direction of y-axis motor based on joystick position
+    if(c == 'y'){
+        if(t == 0)
+            P2->OUT &= ~BIT7;
+        else if(t == 1)
+            P2->OUT |= BIT7;
+    }
 }
