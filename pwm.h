@@ -16,28 +16,29 @@
 #define CALC_PERIOD(X)      (SYSTEM_CLOCK / X) //calc # of ticks in period
 
 
-/* Configure TIMER_A0 to produce PWM waveform
- * - TODO: reset R (timer counter) register
- * - TODO: select SMCLK (3MHz) in the CTL register
- * - TODO: select reset/set output mode for T0.1 timer using CCTL[1]
+/* Configure TIMER_A0-A3 to produce PWM waveform
+ * - Resets R (timer counter) register
+ * - Selects SMCLK (3MHz) in the CTL register
+ * - Selects reset/set output mode using CCTL[1]
  */
 void config_pwm_timer(void);
 
 
-/*  - TODO: Start PWM signal on Pin XX at duty_cycle 100kHz,
- *    Note: the DRV2605L PWM input frequency is XXXX
- *  - TODO: calculate and set the amount of ticks needed in CCR
+/*  Starts PWM signal on Pin XX
  *  - TODO: enable/start timer (UP mode)
- *  - TODO: Counting and then reset * @param uint8_t duty_cycle: 0-100, percentage of time ON
  */
 void start_pwm(uint8_t timer_sel);
 
 
-/* Stop Mode: clear all Mode Control bits, MC, in TAxCTL register */
+/* Stop Mode */
 void stop_pwm(uint8_t timer_sel);
 
 
-/* Config P2.4 to output TA0.1 waveform */
+/* Config P2.4 to output TA0.1 waveform 
+* - P7.7 for TA1
+* - P5.6 for TA2
+* - P10.5 for TA3
+*/
 void config_pwm_gpio(void);
 
 
