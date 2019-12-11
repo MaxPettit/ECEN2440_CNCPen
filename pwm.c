@@ -7,6 +7,9 @@
 #include "msp.h"
 #include "pwm.h"
 
+// Configures 3 timers with set frequencies
+// PWM for z dimension had a late change, 
+// in some places z axis affects 2 timers
 void config_pwm_timer(){
     int a_per = 10000;
     int z_per = 200;
@@ -14,15 +17,15 @@ void config_pwm_timer(){
     TIMER_A0->R = 0; //Reset timer
     TIMER_A0->CTL |=  TIMER_A_CTL_TASSEL_2; //Select SMCLK
     TIMER_A0->CCTL[1] |= TIMER_A_CCTLN_OUTMOD_7; //Set reset/set output mode 0x00E0
-    TIMER_A0->CCR[0] = CALC_PERIOD(a_per);//Set ticks
-    TIMER_A0->CCR[1] = (50*CALC_PERIOD(a_per))/100;
+    TIMER_A0->CCR[0] = CALC_PERIOD(a_per); //Set ticks
+    TIMER_A0->CCR[1] = (50*CALC_PERIOD(a_per))/100; //50% duty cycle
 
     //A1 = y axis
     TIMER_A1->R = 0; //Reset timer
     TIMER_A1->CTL |=  TIMER_A_CTL_TASSEL_2; //Select SMCLK
     TIMER_A1->CCTL[1] |= TIMER_A_CCTLN_OUTMOD_7; //Set reset/set output mode 0x00E0
-    TIMER_A1->CCR[0] = CALC_PERIOD(a_per);//Set ticks
-    TIMER_A1->CCR[1] = 50*CALC_PERIOD(a_per)/100;
+    TIMER_A1->CCR[0] = CALC_PERIOD(a_per);/ /Set ticks
+    TIMER_A1->CCR[1] = 50*CALC_PERIOD(a_per)/100; //50% duty cycle
 
     //A2 = z axis
 //    TIMER_A2->R = 0; //Reset timer
@@ -37,9 +40,10 @@ void config_pwm_timer(){
         TIMER_A3->CCTL[1] |= TIMER_A_CCTLN_OUTMOD_7; //Set reset/set output mode 0x00E0
         TIMER_A3->CTL |= BIT7; //Clock divider of 4
         TIMER_A3->CCR[0] = CALC_PERIOD(z_per); //Set ticks
-        TIMER_A3->CCR[1] = (50*CALC_PERIOD(z_per))/100;
+        TIMER_A3->CCR[1] = (50*CALC_PERIOD(z_per))/100; //50% duty cycle
 }
 
+//Start PWM 
 void start_pwm(uint8_t timer_sel){
     if(timer_sel == 0){//A0 = x axis
         TIMER_A0->CTL |= TIMER_A_CTL_MC_1;
@@ -53,6 +57,7 @@ void start_pwm(uint8_t timer_sel){
     }
 }
 
+//Stop PWM
 void stop_pwm(uint8_t timer_sel){
     if(timer_sel == 0)
         TIMER_A0->CTL &= ~0x010;
@@ -62,6 +67,7 @@ void stop_pwm(uint8_t timer_sel){
             TIMER_A2->CTL &= ~0x010;
 }
 
+//Config PWM output pins
 void config_pwm_gpio(void){
     //TimerA0 P2.4 2.4 of course
     P2->DIR |= BIT4;
