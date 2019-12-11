@@ -14,26 +14,26 @@
 
 
 void startup_config(){
-    config_pwm_timer();
-    config_pwm_gpio();
-    pen_config();
-    start_pwm(z_pwm);
-    uart_config();
+    config_pwm_timer();  // Configure timer settings
+    config_pwm_gpio();   // Configure timer pin outputs
+    pen_config();        // Enable/Configure interrupt for pen
+    start_pwm(z_pwm);    // Start the pen PWM
+    uart_config();       // Configure UART settings
 }
 
 void startup_go(){
-    pen_up();
-    start_msg();
+    pen_up();            // Set the pen up to start
+    start_msg();         // Print startup message
 }
 
-void start_msg(){
+void start_msg(){        // Prints startup message
     int err, i;
     lcd_clear();
     char *Boot = "**** Booting ***";
-    char *Wait = "***Please Wait**";
+    char *Wait = "***Please Wait**";  // Motor driver needs small amount of time after power up before use
     err = uart_write(Boot);
     err = uart_write(Wait);
-    for(i = 0; i < 1000; i++);
+    for(i = 0; i < 10000; i++);
     lcd_clear();
     err = uart_write("Go");
     if(err) return;
