@@ -11,7 +11,7 @@ volatile uint16_t _nadc[32];
 volatile uint8_t _eos;                                                      // channel to end the sequence on
 
 void ADC_init(){
-    while(REF_A->CTL0 & REF_A_CTL0_GENBUSY);                                //If ref generator busy, wait
+    while(REF_A->CTL0 & REF_A_CTL0_GENBUSY);                                // If ref generator busy, wait
     REF_A->CTL0 = REF_A_CTL0_VSEL_0 | REF_A_CTL0_ON;                        // Set/enable internal 1.2V ref
     ADC14->CTL0 |= ADC14_CTL0_SHT0_5                                        // ADC14 sample-and-hold time: 96 cycle sample time on SHT0
                 | ADC14_CTL0_SHT1_5                                         // ADC14 sample-and-hold time: 96 cycle sample time on SHT1
@@ -43,7 +43,7 @@ void ADC_EOS(uint8_t channel){
     _eos=channel;
 }
 
-// Start ADC14 conversions
+// Start ADC conversions
 void ADC_start(){
     ADC14->CTL0 |= ADC14_CTL0_SC;
 }
@@ -51,10 +51,10 @@ void ADC_start(){
 void ADC_addChannel(uint8_t channel, uint8_t map, uint8_t vref){
     if(channel>31) return;
     if(vref!=0 && vref!=1) return;
-    ADC14->CTL0 &= ~ADC14_CTL0_ENC;                                         // Disable ADC14 conversions
+    ADC14->CTL0 &= ~ADC14_CTL0_ENC;                                         // Disable ADC conversions
     ADC14->MCTL[channel] |= map | (vref<<8);                                // Map MCTL[channel] to a specific pin and set vref
     ADC14->IER0 |= (1<<channel);                                            // Enable interrupt for that channel
-    ADC14->CTL0 |= ADC14_CTL0_ENC;                                          // Enable ADC14 Conversions
+    ADC14->CTL0 |= ADC14_CTL0_ENC;                                          // Enable ADC Conversions
 }
 
 uint16_t ADC_getN(uint8_t channel){
