@@ -1,14 +1,14 @@
 /*
- * adc_test.h
+ * adc.h
  *
  *  Created on: Dec 4, 2019
- *      Author: dafre
+ *      Author: Nathan
  */
 #include "msp.h"
 #include <stdint.h>
 
-#ifndef ADC_TEST_H_
-#define ADC_TEST_H_
+#ifndef ADC_H_
+#define ADC_H_
 
 void ADC_init();
 void ADC_addChannel(uint8_t channel, uint8_t map, uint8_t vref);
@@ -17,4 +17,4 @@ double ADC_getMV(uint8_t channel);
 void ADC_EOS(uint8_t channel);
 void ADC_start();
 
-#endif /* ADC_TEST_H_ */
+#endif /* ADC_H_ */
