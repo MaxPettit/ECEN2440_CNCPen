@@ -1,6 +1,7 @@
 # ECEN2440_CNCPen (Joy Pen)
 CNC Joystick Pen for ECEN2440 Final
-// Efram Aredo, Nathan Elsen, Max Pettit
+
+Efram Aredo, Nathan Elsen, Max Pettit
 
 See the hackster.io post for more details [here](https://www.hackster.io/maxpettit/joy-pen-74b8a4).
 Brief Explanation of files below
