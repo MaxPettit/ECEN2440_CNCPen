@@ -5,11 +5,11 @@ Efram Aredo, Nathan Elsen, Max Pettit
 See the hackster.io post for more details [here](https://www.hackster.io/maxpettit/joy-pen-74b8a4).
 Brief Explanation of files below
 
-## ADC 
+## adc 
 * Initializes analog to digital conversion: sets ADC14 sample-and-hold times, starts ADC sample conversions, turns on ADC14
 * Captures values and outputs them
 
-## GPIO 
+## gpio 
 * Initializes pins on MSP inorder to configure motor driver boards
 * Initializes things like step size, enable, stepper mode
 
@@ -21,11 +21,11 @@ Brief Explanation of files below
 * Calls config and init functions
 * Endless loop which reads joystick values and moves motors accordingly
 
-## MOTOR
+## motor
 * Starts and stops motor pwm based on joystick position
 * Determines direction of motors based on joystick position
 
-## PWM 
+## pwm 
 * Configures timers to create pulse width modulations
 * PWM outputs used to move motors and servo
 * Can be paused
